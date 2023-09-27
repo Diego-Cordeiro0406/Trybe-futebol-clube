@@ -9,4 +9,11 @@ export default class TeamModel implements IReaderModel<Iteam> {
 
     return dbData.map(({ id, teamName }) => ({ id, teamName }));
   }
+
+  async findById(id: number): Promise<Iteam | null> {
+    const dbData = await this.model.findByPk(id);
+    if (!dbData) return null;
+
+    return dbData;
+  }
 }
