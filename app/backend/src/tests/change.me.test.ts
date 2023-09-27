@@ -7,7 +7,7 @@ import { App } from '../app';
 import SequelizeTeam from '../database/models/SequelizeTeam';
 
 import { Response } from 'superagent';
-import { teams } from './mocks/team.mock';
+import { team, teams } from './mocks/team.mock';
 
 const { app } = new App();
 chai.use(chaiHttp);
@@ -40,17 +40,25 @@ describe('Seu teste', () => {
 
   //   expect(...)
   // });
-
-  it('Deve retornar todos os livros', async function() {
+  it('Deve retornar todos os times', async function() {
     sinon.stub(SequelizeTeam, 'findAll').resolves(teams as any);
     const chaiHttpResponse = await chai.request(app).get('/teams')
 
     expect(chaiHttpResponse.status).to.be.equal(200);
     expect(chaiHttpResponse.body).to.deep.equal(teams);
   });
- afterEach(sinon.restore)
 
-  it('Seu sub-teste', () => {
-    expect(false).to.be.eq(true);
+  it('Deve retornar um time pelo seu id', async function() {
+    sinon.stub(SequelizeTeam, 'findOne').resolves(team as any);
+    const chaiHttpResponse = await chai.request(app).get('/teams/1')
+
+    expect(chaiHttpResponse.status).to.be.equal(200);
+    expect(chaiHttpResponse.body).to.deep.equal(team);
   });
+ afterEach(sinon.restore)
 });
+
+
+  // it('Seu sub-teste', () => {
+  //   expect(false).to.be.eq(true);
+  // });
