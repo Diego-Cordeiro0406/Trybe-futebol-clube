@@ -21,3 +21,4 @@ export default {
     return queryInterface.dropTable('teams');
   },
 };
+
