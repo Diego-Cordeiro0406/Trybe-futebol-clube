@@ -15,4 +15,10 @@ export default class UserController {
     }
     return res.status(200).json(data);
   }
+
+  public static async findRole(req: Request, res: Response): Promise<Response> {
+    const { role } = req.body.user;
+
+    return res.status(200).json({ role });
+  }
 }

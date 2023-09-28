@@ -27,16 +27,14 @@ export default class UserService {
     return { status: 'SUCCESSFUL', data: { id, username, role, email } };
   }
 
-  // batata
-
   public async login(data: ILogin): Promise<ServiceResponse<ServiceMessage | IToken>> {
     const user = await this.userModel.findByEmail(data.email);
     if (user) {
       if (!bcrypt.compareSync(data.password, user.password)) {
         return { status: 'INVALID_VALUES', data: { message: 'Invalid email or password' } };
       }
-      const { email } = user as IUser;
-      const token = this.jwtService.sign({ email });
+      const { email, role } = user as IUser;
+      const token = this.jwtService.sign({ email, role });
       return { status: 'SUCCESSFUL', data: { token } };
     }
     return { status: 'INVALID_VALUES', data: { message: 'Invalid email or password' } };
