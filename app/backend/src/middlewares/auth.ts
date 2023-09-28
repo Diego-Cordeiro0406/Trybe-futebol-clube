@@ -29,23 +29,3 @@ export default class ValToken {
     next();
   }
 }
-
-// export default class ValToken {
-//   static async validateToken(req: Request, res: Response, next: NextFunction):
-//   Promise<Response | void> {
-//     const tokenA = req.headers.authorization;
-//     const tokenParts = tokenA.split(' ');
-//     const token = tokenParts[1];
-//     if (!token) {
-//       return res.status(401).json({ message: 'Token not found' });
-//     }
-
-//     const validToken = await JWT.verify(token);
-//     req.body.user = validToken;
-//     // console.log(token2);
-//     if (validToken === 'Token must be a valid token') {
-//       return res.status(401).json({ message: validToken });
-//     }
-//     next();
-//   }
-// }

@@ -21,11 +21,16 @@ const wrongPassUser = {
   password: 'xxxxxxxxxx',
 };
 
+const roleUser = {
+  role: 'admin'
+} 
+
 const users = [
   userWithoutPassword,
   {
     id: 2,
-    name: 'Jane Doe',
+    username: 'Jane Doe',
+    role: 'admin',
     email: 'janedoe@email.com',
   },
 ];
@@ -44,4 +49,5 @@ export {
   validLoginBody,
   wrongPassUser,
   userRegistered,
+  roleUser,
 };

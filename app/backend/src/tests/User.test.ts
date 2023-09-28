@@ -4,14 +4,19 @@ import * as chai from 'chai';
 import chaiHttp = require('chai-http');
 
 import { App } from '../app';
-import { invalidEmailBody, invalidPasswordBody, userRegistered, validLoginBody } from './mocks/user.mock';
+import {
+  invalidEmailBody,
+  invalidPasswordBody,
+  roleUser,
+  userRegistered,
+  userWithoutPassword,
+  users,
+  validLoginBody,
+} from './mocks/user.mock';
 import SequelizeUser from '../database/models/SequelizeUser';
-import Validations from '../middlewares/Validations';
-import JWT from '../utils/JWT';
-// import SequelizeUser from '../database/models/SequelizeUser';
 
-// import { Response } from 'superagent';
-// import { team, teams } from './mocks/team.mock';
+import JWT from '../utils/JWT';
+// import ValToken from '../middlewares/auth';
 
 const { app } = new App();
 chai.use(chaiHttp);
@@ -53,10 +58,9 @@ describe('Login Test', function() {
     expect(body).to.be.deep.equal({ message: 'Invalid email or password' });
   });
 
-  it('should return a token when login is done', async function() {
+  it('Deve retornar um token quando o login for bem-sucedido', async function() {
     sinon.stub(SequelizeUser, 'findOne').resolves(userRegistered as any);
     sinon.stub(JWT, 'sign').returns('validToken');
-    // sinon.stub(Validations, 'validateUser').returns();
 
     const { status, body } = await chai.request(app)
       .post('/login')
@@ -64,6 +68,56 @@ describe('Login Test', function() {
 
     expect(status).to.equal(200);
     expect(body).to.have.key('token');
+  });
+    
+  it('Não deve retornar a role do usuario se receber não um token válido', async function() {
+  // sinon.stub(SequelizeUser, 'findOne').resolves(userRegistered as any);
+  // sinon.stub(JWT, 'sign').returns('validToken');
+  // sinon.stub(JWT, 'verify').resolves();
+  // sinon.stub(ValToken, 'validateToken').resolves();
+    const { status, body } = await chai.request(app)
+      .get('/login/role')
+
+    expect(status).to.equal(401);
+    expect(body).to.be.deep.equal({message: 'Token not found'});
+  });
+
+  it('Não deve retornar a role do usuario se receber não um token', async function() {
+      const { status, body } = await chai.request(app)
+        .get('/login/role').set('Authorization', 'Bearer validToken')
+  
+      expect(status).to.equal(401);
+      expect(body).to.be.deep.equal({message: 'Token must be a valid token'});
+    });
+  afterEach(sinon.restore);
+});
+
+describe('Users Test', function() {
+  it('Deve retornar todos os usuarios', async function() {
+    sinon.stub(SequelizeUser, 'findAll').resolves(users as any);
+
+    const { status, body } = await chai.request(app).get('/users');
+
+    expect(status).to.equal(200);
+    expect(body).to.deep.equal(users);
+  });
+
+  it('Deve retornar um usuario pelo id', async function() {
+    sinon.stub(SequelizeUser, 'findByPk').resolves(userWithoutPassword as any);
+
+    const { status, body } = await chai.request(app).get('/users/1');
+
+    expect(status).to.equal(200);
+    expect(body).to.deep.equal(userWithoutPassword);
+  });
+
+  it('Não deve retornar usuario se não tiver', async function() {
+    sinon.stub(SequelizeUser, 'findByPk').resolves(null);
+
+    const { status, body } = await chai.request(app).get('/users/1');
+
+    expect(status).to.equal(404);
+    expect(body.message).to.equal('User not found');
   });
   afterEach(sinon.restore);
 });

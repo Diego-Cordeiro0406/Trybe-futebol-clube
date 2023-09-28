@@ -55,6 +55,13 @@ describe('Seu teste', () => {
     expect(chaiHttpResponse.status).to.be.equal(200);
     expect(chaiHttpResponse.body).to.deep.equal(team);
   });
+  it('Não deve retornar um time pelo seu id se não tiver', async function() {
+    sinon.stub(SequelizeTeam, 'findOne').resolves(null);
+    const chaiHttpResponse = await chai.request(app).get('/teams/1')
+
+    expect(chaiHttpResponse.status).to.be.equal(404);
+    expect(chaiHttpResponse.body).to.deep.equal({message: "Team 1 not found" });
+  });
  afterEach(sinon.restore)
 });
 
