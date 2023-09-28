@@ -27,6 +27,8 @@ export default class UserService {
     return { status: 'SUCCESSFUL', data: { id, username, role, email } };
   }
 
+  // batata
+
   public async login(data: ILogin): Promise<ServiceResponse<ServiceMessage | IToken>> {
     const user = await this.userModel.findByEmail(data.email);
     if (user) {
