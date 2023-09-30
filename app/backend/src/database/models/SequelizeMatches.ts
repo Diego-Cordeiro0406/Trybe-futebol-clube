@@ -25,9 +25,21 @@ SequelizeMatches.init({
     primaryKey: true,
     autoIncrement: true,
   },
-  homeTeamId: DataTypes.NUMBER,
+  homeTeamId: {
+    type: DataTypes.NUMBER,
+    references: {
+      model: 'teams',
+      key: 'id',
+    },
+  },
   homeTeamGoals: DataTypes.NUMBER,
-  awayTeamId: DataTypes.NUMBER,
+  awayTeamId: {
+    type: DataTypes.NUMBER,
+    references: {
+      model: 'teams',
+      key: 'id',
+    },
+  },
   awayTeamGoals: DataTypes.NUMBER,
   inProgress: DataTypes.BOOLEAN,
 }, {
@@ -42,10 +54,13 @@ SequelizeMatches.init({
   * Associations 1:N devem ficar em uma das instâncias de modelo
   * */
 
-SequelizeTeam.belongsTo(SequelizeMatches, { foreignKey: 'homeTeamId', as: 'homeTeam' });
-SequelizeTeam.belongsTo(SequelizeMatches, { foreignKey: 'awayTeamId', as: 'awayTeam' });
+SequelizeMatches.belongsTo(SequelizeTeam, { foreignKey: 'homeTeamId', as: 'homeTeam' });
+SequelizeMatches.belongsTo(SequelizeTeam, { foreignKey: 'awayTeamId', as: 'awayTeam' });
 
-SequelizeMatches.hasMany(SequelizeTeam, { foreignKey: 'homeTeamId', as: 'homeTeam' });
-SequelizeMatches.hasMany(SequelizeTeam, { foreignKey: 'awayTeamId', as: 'awayTeam' });
+// SequelizeTeam.belongsTo(SequelizeMatches, { foreignKey: 'homeTeamId', as: 'homeTeam' });
+// SequelizeTeam.belongsTo(SequelizeMatches, { foreignKey: 'awayTeamId', as: 'awayTeam' });
+
+// SequelizeMatches.hasMany(SequelizeTeam, { foreignKey: 'homeTeamId', as: 'homeTeam' });
+// SequelizeMatches.hasMany(SequelizeTeam, { foreignKey: 'awayTeamId', as: 'awayTeam' });
 
 export default SequelizeMatches;
