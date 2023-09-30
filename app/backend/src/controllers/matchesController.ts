@@ -8,6 +8,15 @@ export default class MatchesController {
   ) {}
 
   public async findAll(req: Request, res: Response) {
+    const { inProgress } = req.query;
+
+    if (inProgress !== undefined) {
+      const matchesByStatus = await this
+        .matchesService.findByMatchStatus(inProgress as string);
+
+      return res.status(200).json(matchesByStatus.data);
+    }
+
     const allMatches = await this.matchesService.findAll();
 
     return res.status(200).json(allMatches.data);

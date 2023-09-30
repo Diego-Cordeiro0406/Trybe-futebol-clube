@@ -18,20 +18,21 @@ export default class MatchesModel implements IAnotherReaderModel<IMatch> {
     });
 
     return dbData;
-  //   .map(({
-  //     id,
-  //     homeTeamId,
-  //     homeTeamGoals,
-  //     awayTeamId,
-  //     awayTeamGoals,
-  //     inProgress,
-  //   }) => ({
-  //     id,
-  //     homeTeamId,
-  //     homeTeamGoals,
-  //     awayTeamId,
-  //     awayTeamGoals,
-  //     inProgress,
-  //   }));
+  }
+
+  async findByMatchStatus(query: string): Promise<IMatch[]> {
+    const dbData = await this.model.findAll({
+      where: { inProgress: query === 'true' },
+      include: [
+        {
+          model: SequelizeTeam, as: 'homeTeam', attributes: ['teamName'],
+        },
+        {
+          model: SequelizeTeam, as: 'awayTeam', attributes: ['teamName'],
+        },
+      ],
+    });
+
+    return dbData;
   }
 }

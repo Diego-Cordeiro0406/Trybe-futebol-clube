@@ -5,5 +5,5 @@ export interface IReaderModel<T> {
 
 export interface IAnotherReaderModel<T> {
   findAll(): Promise<T[]>
-  // findByFinishedMatch(q: string): Promise<T | null>
+  findByMatchStatus(query: string): Promise<T[]>
 }

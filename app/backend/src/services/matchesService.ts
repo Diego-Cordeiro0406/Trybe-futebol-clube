@@ -12,4 +12,9 @@ export default class MatchesService {
     const allMatches = await this.matchesModel.findAll();
     return { status: 'SUCCESSFUL', data: allMatches };
   }
+
+  public async findByMatchStatus(query: string):Promise<ServiceResponse<IMatch[]>> {
+    const matchesByStatus = await this.matchesModel.findByMatchStatus(query);
+    return { status: 'SUCCESSFUL', data: matchesByStatus };
+  }
 }
