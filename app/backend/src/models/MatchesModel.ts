@@ -1,9 +1,9 @@
 import IMatch from '../Interfaces/IMatch';
 import SequelizeMatches from '../database/models/SequelizeMatches';
-import { IAnotherReaderModel } from '../Interfaces/ICrudModel';
+import { IMatchCrudModel } from '../Interfaces/ICrudModel';
 import SequelizeTeam from '../database/models/SequelizeTeam';
 
-export default class MatchesModel implements IAnotherReaderModel<IMatch> {
+export default class MatchesModel implements IMatchCrudModel<IMatch> {
   private model = SequelizeMatches;
   async findAll():Promise<IMatch[]> {
     const dbData = await this.model.findAll({
@@ -16,6 +16,13 @@ export default class MatchesModel implements IAnotherReaderModel<IMatch> {
         },
       ],
     });
+
+    return dbData;
+  }
+
+  async findById(id: number): Promise<IMatch | null> {
+    const dbData = await this.model.findByPk(id);
+    if (!dbData) return null;
 
     return dbData;
   }
@@ -34,5 +41,11 @@ export default class MatchesModel implements IAnotherReaderModel<IMatch> {
     });
 
     return dbData;
+  }
+
+  async finishMatch(id: number): Promise<void> {
+    await this.model.update({ inProgress: false }, {
+      where: { id },
+    });
   }
 }
