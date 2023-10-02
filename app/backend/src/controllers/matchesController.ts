@@ -32,4 +32,16 @@ export default class MatchesController {
 
     res.status(200).json(data);
   }
+
+  public async updatePartialMatch(req: Request, res: Response) {
+    const { id } = req.params;
+    const { status, data } = await this.matchesService
+      .updatePartialMatch(Number(id), req.body);
+
+    if (status !== 'SUCCESSFUL') {
+      return res.status(mapStatusHTTP(status)).json(data);
+    }
+
+    res.status(200).json(data);
+  }
 }

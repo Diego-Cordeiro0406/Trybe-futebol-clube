@@ -2,6 +2,7 @@ import IMatch from '../Interfaces/IMatch';
 import { IMatchCrudModel } from '../Interfaces/ICrudModel';
 import MatchesModel from '../models/MatchesModel';
 import { ServiceMessage, ServiceResponse } from '../Interfaces/ServiceResponse';
+import { scoreType } from '../types/scoreType';
 
 export default class MatchesService {
   constructor(
@@ -26,5 +27,17 @@ export default class MatchesService {
     }
     await this.matchesModel.finishMatch(id);
     return { status: 'SUCCESSFUL', data: { message: 'Finished' } };
+  }
+
+  public async updatePartialMatch(
+    id: number,
+    data: scoreType,
+  ): Promise<ServiceResponse<ServiceMessage>> {
+    const matchExsits = await this.matchesModel.findById(id);
+    if (!matchExsits) return { status: 'NOT_FOUND', data: { message: `Match ${id} not found` } };
+
+    await this.matchesModel.updatePartialMatch(id, data);
+
+    return { status: 'SUCCESSFUL', data: { message: 'Score updated' } };
   }
 }

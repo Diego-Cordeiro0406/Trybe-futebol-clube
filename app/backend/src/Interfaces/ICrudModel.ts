@@ -1,3 +1,4 @@
+import { scoreType } from '../types/scoreType';
 import IMatch from './IMatch';
 
 export interface IReaderModel<T> {
@@ -8,4 +9,5 @@ export interface IReaderModel<T> {
 export interface IMatchCrudModel<T> extends IReaderModel<IMatch> {
   findByMatchStatus(query: string): Promise<T[]>
   finishMatch(id: number): Promise<void>
+  updatePartialMatch(id: number, data: scoreType): Promise<IMatch | null>
 }
