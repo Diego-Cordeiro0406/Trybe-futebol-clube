@@ -1,5 +1,5 @@
 import IMatch from '../Interfaces/IMatch';
-import { IMatchCrudModel } from '../Interfaces/ICrudModel';
+import { IMatchCrudModel, NewEntity } from '../Interfaces/ICrudModel';
 import MatchesModel from '../models/MatchesModel';
 import { ServiceMessage, ServiceResponse } from '../Interfaces/ServiceResponse';
 import { scoreType } from '../types/scoreType';
@@ -39,5 +39,11 @@ export default class MatchesService {
     await this.matchesModel.updatePartialMatch(id, data);
 
     return { status: 'SUCCESSFUL', data: { message: 'Score updated' } };
+  }
+
+  public async createMatch(data: NewEntity<IMatch>): Promise<ServiceResponse<IMatch>> {
+    const newMatch = await this.matchesModel.createMatch(data);
+
+    return { status: 'SUCCESSFUL', data: newMatch };
   }
 }

@@ -1,6 +1,6 @@
 import IMatch from '../Interfaces/IMatch';
 import SequelizeMatches from '../database/models/SequelizeMatches';
-import { IMatchCrudModel } from '../Interfaces/ICrudModel';
+import { IMatchCrudModel, NewEntity } from '../Interfaces/ICrudModel';
 import SequelizeTeam from '../database/models/SequelizeTeam';
 import { scoreType } from '../types/scoreType';
 
@@ -48,6 +48,13 @@ export default class MatchesModel implements IMatchCrudModel<IMatch> {
     await this.model.update({ inProgress: false }, {
       where: { id },
     });
+  }
+
+  async createMatch(data: NewEntity<IMatch>): Promise<IMatch> {
+    const format = { ...data, inProgress: true };
+    const newMatch = await this.model.create(format);
+
+    return newMatch;
   }
 
   async updatePartialMatch(id: number, data: scoreType): Promise<IMatch | null> {

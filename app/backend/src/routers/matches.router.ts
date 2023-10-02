@@ -16,4 +16,8 @@ matchesRouter
   .patch('/:id', Auth.validateToken, (req: Request, res: Response) => matchesController
     .updatePartialMatch(req, res));
 
+matchesRouter
+  .post('/', Auth.validateToken, (req: Request, res: Response) => matchesController
+    .createMatch(req, res));
+
 export default matchesRouter;
