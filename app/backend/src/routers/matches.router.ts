@@ -1,6 +1,7 @@
 import { Request, Router, Response } from 'express';
 import MatchesController from '../controllers/matchesController';
 import Auth from '../middlewares/auth';
+import Validations from '../middlewares/Validations';
 
 const matchesController = new MatchesController();
 
@@ -17,7 +18,12 @@ matchesRouter
     .updatePartialMatch(req, res));
 
 matchesRouter
-  .post('/', Auth.validateToken, (req: Request, res: Response) => matchesController
-    .createMatch(req, res));
+  .post(
+    '/',
+    Auth.validateToken,
+    Validations.validateMatch,
+    (req: Request, res: Response) => matchesController
+      .createMatch(req, res),
+  );
 
 export default matchesRouter;
