@@ -13,9 +13,25 @@ export default class LeaderboardService {
   public async findAll(): Promise<ServiceResponse<ILeaderboard[]>> {
     const teams = await this.teamModel.findAll();
     const matches = await this.matchesModel.findAll();
+    const filterMatch = matches.filter((match) => match.inProgress === false);
+    const leaderboardResult = teams.map((team) => new LeaderboardModel(team, filterMatch));
 
-    const leaderboardResult = teams.map((team) => new LeaderboardModel(team, matches));
+    const result = leaderboardResult.map((team) => {
+      const { teamId, ...rest } = team;
 
-    return { status: 'SUCCESSFUL', data: leaderboardResult };
+      return rest;
+    });
+
+    const leaderboardOrdered = result.sort((a, b) => {
+      if (b.totalPoints !== a.totalPoints) return b.totalPoints - a.totalPoints;
+
+      if (a.totalVictories !== b.totalVictories) return b.totalVictories - a.totalVictories;
+
+      if (a.goalsBalance !== b.goalsBalance) return b.goalsBalance - a.goalsBalance;
+
+      return b.goalsFavor - a.goalsFavor;
+    });
+
+    return { status: 'SUCCESSFUL', data: leaderboardOrdered };
   }
 }

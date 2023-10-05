@@ -27,16 +27,18 @@ export default class LeaderboardModel implements ILeaderboard {
 
   private matchesResult(concludedMatches: IMatch[]) {
     concludedMatches.filter((match) => match.homeTeamId === this.teamId).forEach((match) => {
-      this.goalsFavor = match.homeTeamGoals;
-      this.goalsOwn = match.awayTeamGoals;
-      if (match.inProgress === false) {
-        if (match.homeTeamGoals > match.awayTeamGoals) {
+      this.goalsFavor += match.homeTeamGoals;
+      this.goalsOwn += match.awayTeamGoals;
+      switch (true) {
+        case match.homeTeamGoals > match.awayTeamGoals:
           this.totalVictories += 1;
-        }
-        if (match.awayTeamGoals > match.homeTeamGoals) {
+          break;
+        case match.homeTeamGoals < match.awayTeamGoals:
           this.totalLosses += 1;
-        }
-        this.totalDraws += 1;
+          break;
+        default:
+          this.totalDraws += 1;
+          break;
       }
     });
   }
