@@ -40,6 +40,15 @@ const invalidPasswordBody = { email: 'jondoe@email.com', password: 'Jon' };
 const invalidEmailBody = { email: 'invalid_email', password: 'JonDoe' };
 const userRegistered = { ...user, password: '$2a$08$xi.Hxk1czAO0nZR..B393u10aED0RQ1N3PAEXQ7HxtLjKPEZBu.PW' };
 
+const myToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGFkbWluLmNvbSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTY5NjYxNjk1NywiZXhwIjoxNjk3NDgwOTU3fQ.5HwfxLiEYAX7VOdMTYFW11Vl7_zb0hVcyF1zjU39pPE"
+
+const tokenUncoded = {
+  email: 'admin@admin.com',
+  role: 'admin',
+  iat: 1696268343,
+  exp: 1697132343
+}
+
 export {
   user,
   userWithoutPassword,
@@ -50,4 +59,6 @@ export {
   wrongPassUser,
   userRegistered,
   roleUser,
+  myToken,
+  tokenUncoded,
 };
