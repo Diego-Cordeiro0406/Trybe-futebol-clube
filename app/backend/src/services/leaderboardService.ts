@@ -3,11 +3,13 @@ import MatchesModel from '../models/MatchesModel';
 import TeamModel from '../models/TeamModel';
 import { ILeaderboard } from '../Interfaces/ILeaderboard';
 import LeaderboardModel from '../models/LeaderboardModel';
+// import LeaderboardAwayModel from '../models/LeaderboardAwayModel';
 
 export default class LeaderboardService {
   constructor(
     private teamModel = new TeamModel(),
     private matchesModel = new MatchesModel(),
+    // private isAway = false,
   ) {}
 
   public async findAll(): Promise<ServiceResponse<ILeaderboard[]>> {
@@ -15,23 +17,44 @@ export default class LeaderboardService {
     const matches = await this.matchesModel.findAll();
     const filterMatch = matches.filter((match) => match.inProgress === false);
     const leaderboardResult = teams.map((team) => new LeaderboardModel(team, filterMatch));
-
+    // const leaderboardResult = teams
+    //   .map((team) => (this
+    //     .isAway
+    //     ? new LeaderboardAwayModel(team, filterMatch) : new LeaderboardModel(team, filterMatch)));
     const result = leaderboardResult.map((team) => {
       const { teamId, ...rest } = team;
-
       return rest;
     });
-
     const leaderboardOrdered = result.sort((a, b) => {
       if (b.totalPoints !== a.totalPoints) return b.totalPoints - a.totalPoints;
-
       if (a.totalVictories !== b.totalVictories) return b.totalVictories - a.totalVictories;
-
       if (a.goalsBalance !== b.goalsBalance) return b.goalsBalance - a.goalsBalance;
-
       return b.goalsFavor - a.goalsFavor;
     });
-
     return { status: 'SUCCESSFUL', data: leaderboardOrdered };
   }
 }
+// public async findAllAway(): Promise<ServiceResponse<ILeaderboard[]>> {
+//   const teams = await this.teamModel.findAll();
+//   const matches = await this.matchesModel.findAll();
+//   const filterMatch = matches.filter((match) => match.inProgress === false);
+//   const leaderboardResult = teams.map((team) => new LeaderboardAwayModel(team, filterMatch));
+
+//   const result = leaderboardResult.map((team) => {
+//     const { teamId, ...rest } = team;
+
+//     return rest;
+//   });
+
+//   const leaderboardOrdered = result.sort((a, b) => {
+//     if (b.totalPoints !== a.totalPoints) return b.totalPoints - a.totalPoints;
+
+//     if (a.totalVictories !== b.totalVictories) return b.totalVictories - a.totalVictories;
+
+//     if (a.goalsBalance !== b.goalsBalance) return b.goalsBalance - a.goalsBalance;
+
+//     return b.goalsFavor - a.goalsFavor;
+//   });
+
+//   return { status: 'SUCCESSFUL', data: leaderboardOrdered };
+// }

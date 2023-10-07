@@ -3,6 +3,7 @@ import LeaderboardService from '../services/leaderboardService';
 
 export default class LeaderboardController {
   constructor(
+    // private isAway: boolean = false,
     private leaderboardService = new LeaderboardService(),
   ) {}
 
