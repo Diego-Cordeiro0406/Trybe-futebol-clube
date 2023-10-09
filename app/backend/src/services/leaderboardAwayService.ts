@@ -2,9 +2,9 @@ import { ServiceResponse } from '../Interfaces/ServiceResponse';
 import MatchesModel from '../models/MatchesModel';
 import TeamModel from '../models/TeamModel';
 import { ILeaderboard } from '../Interfaces/ILeaderboard';
-import LeaderboardModel from '../models/LeaderboardModel';
+import LeaderboardAwayModel from '../models/LeaderboardAwayModel';
 
-export default class LeaderboardService {
+export default class LeaderboardAwayService {
   constructor(
     private teamModel = new TeamModel(),
     private matchesModel = new MatchesModel(),
@@ -14,7 +14,7 @@ export default class LeaderboardService {
     const teams = await this.teamModel.findAll();
     const matches = await this.matchesModel.findAll();
     const filterMatch = matches.filter((match) => match.inProgress === false);
-    const leaderboardResult = teams.map((team) => new LeaderboardModel(team, filterMatch));
+    const leaderboardResult = teams.map((team) => new LeaderboardAwayModel(team, filterMatch));
 
     const result = leaderboardResult.map((team) => {
       const { teamId, ...rest } = team;
